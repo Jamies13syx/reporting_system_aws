@@ -29,6 +29,7 @@ Change gmail sender to personal 163 mail box and enable SSL (change port number 
   **Change S3 back to the same region as SQS and resolved**
 2. Naming issue on my customized *PDF-request-queue* and *PDF_Request_queue* in original code → rise *the specific queue is non-existent exception*:
 
-  **Change @SqsListener("PDF-response-queue") and  @SqsListener("Excel-response-queue") in client service ReportSQSListener**
+  **Change @SqsListener("PDF-response-queue") and  @SqsListener("Excel-response-queue") in client service ReportSQSListener**   
+
 3. Close outputstream in *ExcelGenerationServiceImpl.generateExcelReport()*
 4. Fix hardcode name in *ExcelGenerationController.downloadExcel()*, replace hardcode with file ID.

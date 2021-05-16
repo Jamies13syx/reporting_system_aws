@@ -32,7 +32,7 @@ public class EmailServiceImpl implements EmailService{
     private void send(Object message) {
         queueMessagingTemplate.convertAndSend("Email-queue", message);
         log.info("Email sent: {}", message);
-        String s = "{ \"token\": \"12345\", \"to\": \"xhawn23@gmail.com\", \"subject\": \"This is a test\", \"body\": \"<html>Hi <b>testing</b></html>\" }";
+//        String s = "{ \"token\": \"12345\", \"to\": \"xhawn23@gmail.com\", \"subject\": \"This is a test\", \"body\": \"<html>Hi <b>testing</b></html>\" }";
     }
 
 }

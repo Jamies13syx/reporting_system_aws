@@ -67,7 +67,7 @@ public class RedisConfig {
         Jackson2JsonRedisSerializer<ExcelFile> redisSerializer = new Jackson2JsonRedisSerializer<>(ExcelFile.class);
         ObjectMapper om = new ObjectMapper();
         om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);//get fix local time
         om.registerModule(new JavaTimeModule());
 //        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
         redisSerializer.setObjectMapper(om);

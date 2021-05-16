@@ -17,6 +17,8 @@ import com.antra.report.client.repository.ReportRequestRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpMethod;
@@ -75,7 +77,6 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    @Async
     public CompletableFuture<ReportVO> generateReportsSync(ReportRequest request) {
         persistToLocal(request);
         sendDirectRequests(request);
@@ -84,7 +85,7 @@ public class ReportServiceImpl implements ReportService {
         return CompletableFuture.supplyAsync(() -> new ReportVO(reportRequestRepo.findById(request.getReqId()).orElseThrow()));
     }
     //TODO:Change to parallel process using Threadpool? CompletableFuture?
-    @Async
+    @Async("taskExecutor")
     protected void sendDirectRequests(ReportRequest request) {
         RestTemplate rs = new RestTemplate();
 //        ExcelResponse excelResponse = new ExcelResponse();
@@ -110,7 +111,7 @@ public class ReportServiceImpl implements ReportService {
         sendDirectExcelRequest(rs, request);
         sendDirectPDFRequest(rs, request);
     }
-
+    @Async("taskExecutor")
     protected void sendDirectExcelRequest(RestTemplate rs, ReportRequest request) {
         ExcelResponse excelResponse = new ExcelResponse();
         log.debug("sendExcelRequestSync -> " + Thread.currentThread().getName());
@@ -124,7 +125,7 @@ public class ReportServiceImpl implements ReportService {
             updateLocal(excelResponse);
         }
     }
-
+    @Async("taskExecutor")
     protected void sendDirectPDFRequest(RestTemplate rs, ReportRequest request) {
         PDFResponse pdfResponse = new PDFResponse();
         log.debug("sendPDFRequestSync -> " + Thread.currentThread().getName());
@@ -196,7 +197,7 @@ public class ReportServiceImpl implements ReportService {
         }
         entity.setUpdatedTime(LocalDateTime.now());
         reportRequestRepo.save(entity);
-        String to = "youremail@gmail.com";
+        String to = "xhawn23@gmail.com";
         emailService.sendEmail(to, EmailType.SUCCESS, entity.getSubmitter());
     }
 
